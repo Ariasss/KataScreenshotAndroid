@@ -18,6 +18,7 @@ package com.karumi.screenshot;
 
 import android.app.Activity;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import com.karumi.screenshot.di.MainComponent;
 import com.karumi.screenshot.di.MainModule;
@@ -32,6 +33,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.mockito.Mockito.when;
 
 public class MainActivityTest extends ScreenshotTest {
@@ -73,7 +78,7 @@ public class MainActivityTest extends ScreenshotTest {
   }
 
   @Test
-  public void showsTenSuperHeros() {
+  public void showsSomeSuperHerosHeader() {
     givenThereAreSomeSuperHeroes(10, ANY_AVENGERS);
 
     Activity activity = startActivity();
@@ -81,6 +86,15 @@ public class MainActivityTest extends ScreenshotTest {
     compareScreenshot(activity);
   }
 
+  @Test
+  public void showsSomeSuperHerosFooter() {
+    givenThereAreSomeSuperHeroes(10, ANY_AVENGERS);
+    Activity activity = startActivity();
+
+    onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(9, scrollTo()));
+
+    compareScreenshot(activity);
+  }
 
   private List<SuperHero> givenThereAreSomeSuperHeroes(int numberOfSuperHeroes, boolean avengers) {
     List<SuperHero> superHeroes = new LinkedList<>();
