@@ -36,6 +36,7 @@ import static org.mockito.Mockito.when;
 
 public class MainActivityTest extends ScreenshotTest {
 
+  private static final boolean ANY_AVENGERS = true;
   @Rule public DaggerMockRule<MainComponent> daggerRule =
       new DaggerMockRule<>(MainComponent.class, new MainModule()).set(
           new DaggerMockRule.ComponentSetter<MainComponent>() {
@@ -53,13 +54,24 @@ public class MainActivityTest extends ScreenshotTest {
 
   @Mock SuperHeroesRepository repository;
 
-  @Test public void showsEmptyCaseIfThereAreNoSuperHeroes() {
+  @Test
+  public void showsEmptyCaseIfThereAreNoSuperHeroes() {
     givenThereAreNoSuperHeroes();
 
     Activity activity = startActivity();
 
     compareScreenshot(activity);
   }
+
+  @Test
+  public void showsJustOnlyOneSuperHero() {
+    givenThereAreSomeSuperHeroes(1, ANY_AVENGERS);
+
+    Activity activity = startActivity();
+
+    compareScreenshot(activity);
+  }
+
 
   private List<SuperHero> givenThereAreSomeSuperHeroes(int numberOfSuperHeroes, boolean avengers) {
     List<SuperHero> superHeroes = new LinkedList<>();
