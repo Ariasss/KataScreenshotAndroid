@@ -19,6 +19,7 @@ package com.karumi.screenshot;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import com.karumi.screenshot.di.MainComponent;
 import com.karumi.screenshot.di.MainModule;
@@ -30,6 +31,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.mockito.Mockito.when;
 
 public class SuperHeroDetailActivityTest extends ScreenshotTest {
@@ -51,31 +57,63 @@ public class SuperHeroDetailActivityTest extends ScreenshotTest {
 
   @Mock SuperHeroesRepository repository;
 
-  @Test public void showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam() {
-    SuperHero superHero = givenAnAvenger();
+  @Test
+  public void showsAllInfoInDetailsPage() {
+    SuperHero hero = givenSuperHero(SuperHeroMother.regularSuperHero());
 
-    Activity activity = startActivity(superHero);
-
-    compareScreenshot(activity);
-  }
-
-  @Test public void doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam() {
-    SuperHero superHero = givenThereIsASuperHero(false);
-
-    Activity activity = startActivity(superHero);
+    Activity activity = startActivity(hero);
 
     compareScreenshot(activity);
   }
 
-  private SuperHero givenAnAvenger() {
-    return givenThereIsASuperHero(true);
+  @Test
+  public void showsBigTitleInDetailsPage() {
+    SuperHero hero = givenSuperHero(SuperHeroMother.bigTitleHero());
+
+    Activity activity = startActivity(hero);
+
+    compareScreenshot(activity);
   }
 
-  private SuperHero givenThereIsASuperHero(boolean isAvenger) {
-    String superHeroName = "SuperHero";
-    String superHeroDescription = "Super Hero Description";
-    SuperHero superHero = new SuperHero(superHeroName, null, isAvenger, superHeroDescription);
-    when(repository.getByName(superHeroName)).thenReturn(superHero);
+  @Test
+  public void showsNoTitleInDetailsPage() {
+    SuperHero hero = givenSuperHero(SuperHeroMother.NoTitleHero());
+
+    Activity activity = startActivity(hero);
+
+    compareScreenshot(activity);
+  }
+
+  @Test
+  public void showsNoDescriptionInDetailsPage() {
+    SuperHero hero = givenSuperHero(SuperHeroMother.NoDescriptionHero());
+
+    Activity activity = startActivity(hero);
+
+    compareScreenshot(activity);
+  }
+/*
+  @Test
+  public void showsLongDescriptionHeaderInDetailsPage() {
+    SuperHero hero = givenSuperHero(SuperHeroMother.LongDescriptionHero());
+
+    Activity activity = startActivity(hero);
+
+    compareScreenshot(activity);
+  }
+
+  @Test
+  public void showsLongDescriptionFooterInDetailsPage() {
+    SuperHero hero = givenSuperHero(SuperHeroMother.LongDescriptionHero());
+    Activity activity = startActivity(hero);
+
+    onView(withId(R.id.tv_super_hero_description)).perform(scrollTo());
+
+    compareScreenshot(activity);
+  }*/
+
+  private SuperHero givenSuperHero (SuperHero superHero){
+    when(repository.getByName(superHero.getName())).thenReturn(superHero);
     return superHero;
   }
 

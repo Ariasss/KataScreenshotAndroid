@@ -20,6 +20,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import com.karumi.screenshot.model.SuperHero;
+import com.karumi.screenshot.model.SuperHeroBuilder;
 import com.karumi.screenshot.ui.presenter.SuperHeroesPresenter;
 import com.karumi.screenshot.ui.view.SuperHeroViewHolder;
 import org.junit.Test;
@@ -108,6 +109,6 @@ public class SuperHeroViewHolderTest extends ScreenshotTest {
 
   private SuperHero givenASuperHero(String superHeroName, String superHeroDescription,
       boolean isAvenger) {
-    return new SuperHero(superHeroName, null, isAvenger, superHeroDescription);
+    return new SuperHeroBuilder().setName(superHeroName).setPhoto(null).setIsAvenger(isAvenger).setDescription(superHeroDescription).createSuperHero();
   }
 }
